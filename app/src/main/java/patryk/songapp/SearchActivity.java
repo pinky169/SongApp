@@ -1,5 +1,7 @@
 package patryk.songapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -25,10 +25,8 @@ public class SearchActivity extends AppCompatActivity {
     final String url = "https://bitbucket.org/tooploox/android-recruitment-intern/raw/3cad5128a0f89b9db5ea90af67c02fed196cbeac/songs-list/songs-list.json";
     JSONArray songs;
     ListView mListView;
-    //ListAdapter mAdapter;
     SimpleAdapter mAdapter;
     ArrayList<HashMap<String, String>> songList;
-    ImageButton mButton;
     EditText mEditText;
     String jsonStr;
 
@@ -58,7 +56,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    songList.addAll(getResults(charSequence));
+                    if (isNetworkAvailable(getApplicationContext())) {
+                        ArrayList<HashMap<String, String>> songList = new ArrayList<>();
+                        SimpleAdapter mAdapter = new SimpleAdapter(SearchActivity.this, songList,
+                                R.layout.details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
+                                new int[]{R.id.song_name, R.id.artist, R.id.year});
+                        mListView.setAdapter(mAdapter);
+                        songList.addAll(getResults(charSequence));
+                        mAdapter.notifyDataSetChanged();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -72,6 +78,12 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    public boolean isNetworkAvailable(Context context) {
+        
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
     ArrayList<HashMap<String, String>> getResults(CharSequence s) throws JSONException {
 
         songList.clear();
@@ -81,27 +93,21 @@ public class SearchActivity extends AppCompatActivity {
             String artist = sth.getString("ARTIST CLEAN");
             String release_year = sth.getString("Release Year");
 
-            HashMap<String, String> songInfo = new HashMap<>();
+            HashMap<String, String> info = new HashMap<>();
 
-            if (name.toLowerCase().contains(s) || artist.toLowerCase().contains(s) || release_year.contains(s)) {
-                songInfo.put("Song Clean", name);
-                songInfo.put("ARTIST CLEAN", artist);
-                songInfo.put("Release Year", release_year);
-                songList.add(songInfo);
+            if (name.toLowerCase().contains(s.toString().toLowerCase()) || artist.toLowerCase().contains(s.toString().toLowerCase()) || release_year.contains(s)) {
+                info.put("Song Clean", name);
+                info.put("ARTIST CLEAN", artist);
+                info.put("Release Year", release_year);
+                songList.add(info);
             }
         }
-
-/*        SimpleAdapter adapter = new SimpleAdapter(SearchActivity.this, songList,
-                R.layout.details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
-                new int[]{R.id.song_name, R.id.artist, R.id.year});
-        mListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();*/
         mAdapter.notifyDataSetChanged();
 
         return songList;
     }
 
-    class GetSongs extends AsyncTask<Void, Void, Void> {
+    private class GetSongs extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -111,56 +117,59 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            HttpHandler sh = new HttpHandler();
-            // Making a request to url and getting response
-            jsonStr = sh.makeServiceCall(url);
+            if (isNetworkAvailable(getApplicationContext())) {
 
-            Log.e("TAG", "Response from url: " + jsonStr);
-            if (jsonStr != null) {
-                try {
+                HttpHandler sh = new HttpHandler();
+                // Making a request to url and getting response
+                jsonStr = sh.makeServiceCall(url);
 
-                    songs = new JSONArray(jsonStr);
+                Log.e("TAG", "Response from url: " + jsonStr);
+                if (jsonStr != null) {
+                    try {
 
-                    // looping through All songs
-                    for (int i = 0; i < songs.length(); i++) {
-                        JSONObject s = songs.getJSONObject(i);
-                        String name = s.getString("Song Clean");
-                        String artist = s.getString("ARTIST CLEAN");
-                        String release_year = s.getString("Release Year");
+                        songs = new JSONArray(jsonStr);
 
-                        // temp hash map for single song
-                        HashMap<String, String> songInfo = new HashMap<>();
+                        // looping through All songs
+                        for (int i = 0; i < songs.length(); i++) {
+                            JSONObject s = songs.getJSONObject(i);
+                            String name = s.getString("Song Clean");
+                            String artist = s.getString("ARTIST CLEAN");
+                            String release_year = s.getString("Release Year");
 
-                        // adding each child node to HashMap key => value
-                        songInfo.put("Song Clean", name);
-                        songInfo.put("ARTIST CLEAN", artist);
-                        songInfo.put("Release Year", release_year);
+                            // temp hash map for single song
+                            HashMap<String, String> songInfo = new HashMap<>();
 
-                        // adding songs to song list
-                        songList.add(songInfo);
-                        //songListBackup.add(songInfo);
+                            // adding each child node to HashMap key => value
+                            songInfo.put("Song Clean", name);
+                            songInfo.put("ARTIST CLEAN", artist);
+                            songInfo.put("Release Year", release_year);
+
+                            // adding songs to song list
+                            songList.add(songInfo);
+                            //songListBackup.add(songInfo);
+
+                        }
+                    } catch (final JSONException e) {
+                        Log.e("TAG", "Json parsing error: " + e.getMessage());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),
+                                        "Json parsing error: " + e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
 
                     }
-                } catch (final JSONException e) {
-                    Log.e("TAG", "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
 
                 }
-
             } else {
                 Log.e("TAG", "Couldn't get json from server.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                "Couldn't get json from server. Check your internet connection.",
                                 Toast.LENGTH_LONG).show();
                     }
                 });
@@ -172,7 +181,6 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            Toast.makeText(SearchActivity.this, "JSON Data has been downloaded", Toast.LENGTH_SHORT).show();
             mListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
