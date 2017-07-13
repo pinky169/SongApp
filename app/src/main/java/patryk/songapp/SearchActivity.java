@@ -1,6 +1,7 @@
 package patryk.songapp;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -43,6 +47,8 @@ public class SearchActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.listView);
 
+        mListView.setEmptyView(findViewById(R.id.empty_list));
+
         new GetSongs().execute();
 
         mEditText = (EditText) findViewById(R.id.searchText);
@@ -75,16 +81,15 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     public boolean isNetworkAvailable(Context context) {
-        
+
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    ArrayList<HashMap<String, String>> getResults(CharSequence s) throws JSONException {
+    public ArrayList<HashMap<String, String>> getResults(CharSequence s) throws JSONException {
 
         songList.clear();
         for (int i = 0; i < songs.length(); i++) {
@@ -105,6 +110,25 @@ public class SearchActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
         return songList;
+    }
+
+    //Hide a keyboard if our editText loses focus
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    Log.d("focus", "touchevent");
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     private class GetSongs extends AsyncTask<Void, Void, Void> {

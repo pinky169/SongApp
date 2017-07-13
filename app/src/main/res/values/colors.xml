@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#04263d</color>
+    <color name="colorPrimaryDark">#001a2b</color>
+    <color name="colorAccent">#7e86af</color>
+    <color name="mBlue">#3498db</color>
+    <color name="mBlack">#000000</color>
+    <color name="edttxt_background">#b1d3ff</color>
+    <color name="test1primary">#1D6CFF</color>
+    <color name="test2dark">#7645FF</color>
+    <color name="test3bright">#C025FF</color>
 </resources>
