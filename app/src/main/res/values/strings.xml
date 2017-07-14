@@ -5,4 +5,7 @@
     <string name="artist">Artist:</string>
     <string name="release_year">Release year:</string>
     <string name="empty_list">Nothing here&#8230;</string>
+    <string name="welcome_msg"><b>Welcome!</b>\n\nNavigate <i>left</i> to choose <i>remote</i> source.\n\nNavigate <i>right</i> to choose <i>local</i> source.</string>
+    <string name="remote">Remote</string>
+    <string name="local">Local</string>
 </resources>

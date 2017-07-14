@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mBlue"
     android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp" >
+    android:layout_marginRight="5dp"
+    android:background="@color/mBlue">
 
 
     <ImageView
@@ -13,21 +13,22 @@
         android:layout_height="55dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
         android:src="@drawable/ic_song" />
 
     <TextView
         android:id="@+id/song_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ic_song"
-        android:layout_toEndOf="@id/ic_song"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/ic_song"
+        android:layout_toRightOf="@id/ic_song"
+        android:fontFamily="sans-serif"
         android:text="@string/song_name"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000000"
@@ -37,30 +38,32 @@
         android:id="@+id/artistInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ic_song"
-        android:layout_toEndOf="@id/ic_song"
         android:layout_below="@id/song_name"
-        android:layout_marginTop="1dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/ic_song"
+        android:layout_toRightOf="@id/ic_song"
+        android:fontFamily="sans-serif-light"
         android:text="@string/artist"
-        android:textColor="@color/mBlack"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/mBlack"
         android:textSize="14sp" />
 
     <TextView
         android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/artistInfo"
-        android:layout_toEndOf="@id/artistInfo"
         android:layout_below="@id/song_name"
-        android:layout_marginTop="1dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/artistInfo"
+        android:layout_toRightOf="@id/artistInfo"
+        android:fontFamily="sans-serif-thin"
         android:text="@string/artist"
-        android:textColor="@color/mBlack"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/mBlack"
         android:textSize="14sp" />
 
     <TextView
@@ -70,23 +73,25 @@
         android:layout_alignLeft="@id/artistInfo"
         android:layout_alignStart="@id/artistInfo"
         android:layout_below="@id/artistInfo"
+        android:fontFamily="sans-serif-light"
         android:text="@string/release_year"
-        android:textColor="@color/mBlack"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/mBlack"
         android:textSize="14sp" />
 
     <TextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/yearInfo"
-        android:layout_toEndOf="@id/yearInfo"
+        android:layout_below="@id/artist"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_below="@id/artist"
+        android:layout_toEndOf="@id/yearInfo"
+        android:layout_toRightOf="@id/yearInfo"
+        android:fontFamily="sans-serif-thin"
         android:text="@string/release_year"
-        android:textColor="@color/mBlack"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/mBlack"
         android:textSize="14sp" />
 
 </RelativeLayout>
