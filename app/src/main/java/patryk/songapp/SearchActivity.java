@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,13 +27,14 @@ import java.util.HashMap;
 
 public class SearchActivity extends AppCompatActivity {
 
-    final String url = "https://bitbucket.org/tooploox/android-recruitment-intern/raw/3cad5128a0f89b9db5ea90af67c02fed196cbeac/songs-list/songs-list.json";
-    JSONArray songs;
-    ListView mListView;
-    SimpleAdapter mAdapter;
-    ArrayList<HashMap<String, String>> songList;
-    EditText mEditText;
-    String jsonStr;
+    private final String url = "https://bitbucket.org/tooploox/android-recruitment-intern/raw/3cad5128a0f89b9db5ea90af67c02fed196cbeac/songs-list/songs-list.json";
+    private JSONArray songs;
+    private ListView mListView;
+    private SimpleAdapter mAdapter;
+    private ArrayList<HashMap<String, String>> songList;
+    private EditText mEditText;
+    private String jsonStr;
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +42,24 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
 
         songList = new ArrayList<>();
-
         mAdapter = new SimpleAdapter(SearchActivity.this, songList,
                 R.layout.details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
                 new int[]{R.id.song_name, R.id.artist, R.id.year});
 
         mListView = (ListView) findViewById(R.id.listView);
-
         mListView.setEmptyView(findViewById(R.id.empty_list));
+
+        srl = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetSongs().execute();
+            }
+        });
 
         new GetSongs().execute();
 
         mEditText = (EditText) findViewById(R.id.searchText);
-
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,7 +119,7 @@ public class SearchActivity extends AppCompatActivity {
         return songList;
     }
 
-    //Hide a keyboard if our editText loses focus
+    //Hide a keyboard if our EditText loses focus
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -135,7 +142,8 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(SearchActivity.this, "Json Data is downloading...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SearchActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
+            srl.setRefreshing(true);
         }
 
         @Override
@@ -151,6 +159,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (jsonStr != null) {
                     try {
 
+                        songList.clear();
                         songs = new JSONArray(jsonStr);
 
                         // looping through All songs
@@ -193,7 +202,7 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check your internet connection.",
+                                "Couldn't get data from the server.\nCheck your internet connection.",
                                 Toast.LENGTH_LONG).show();
                     }
                 });
@@ -205,6 +214,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            srl.setRefreshing(false);
             mListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }

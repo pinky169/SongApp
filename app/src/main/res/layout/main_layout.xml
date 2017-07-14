@@ -20,11 +20,19 @@
         android:paddingStart="5dp"
         android:textColor="@color/colorPrimaryDark" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchText" />
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchText">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchText" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_list"
@@ -40,7 +48,8 @@
         android:paddingTop="150dp"
         android:text="@string/empty_list"
         android:textColor="@color/test3bright"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
