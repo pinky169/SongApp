@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,6 +110,9 @@ public class RemoteDataActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            if(!isNetworkAvailable(RemoteDataActivity.this)) {
+                Toast.makeText(RemoteDataActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
+            }
             sR.setRefreshing(true);
         }
 
@@ -128,21 +132,22 @@ public class RemoteDataActivity extends AppCompatActivity {
                     a = a.replace(" ", "+");
                     response = new Search(a).setEntity(Entity.SONG).execute();
                 }
-            }
-            List<Result> results = response.getResults();
 
-            if (results != null && results.size() > 0) {
-                for (Result result : results) {
-                    artist = result.getArtistName();
-                    track = result.getTrackName();
-                    year = result.getReleaseDate();
+                List<Result> results = response.getResults();
 
-                    HashMap<String, String> info = new HashMap<>();
+                if (results != null && results.size() > 0) {
+                    for (Result result : results) {
+                        artist = result.getArtistName();
+                        track = result.getTrackName();
+                        year = result.getReleaseDate();
 
-                    info.put("artistName", artist);
-                    info.put("trackName", track);
-                    info.put("releaseDate", year);
-                    songList.add(info);
+                        HashMap<String, String> info = new HashMap<>();
+
+                        info.put("artistName", artist);
+                        info.put("trackName", track);
+                        info.put("releaseDate", year);
+                        songList.add(info);
+                    }
                 }
             } else {
                 //Log.i("SongApp->", results.toString());
