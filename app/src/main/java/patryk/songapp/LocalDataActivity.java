@@ -176,7 +176,7 @@ public class LocalDataActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(LocalDataActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LocalDataActivity.this, "Loading...", Toast.LENGTH_SHORT).show();
             srl.setRefreshing(true);
         }
 

@@ -7,42 +7,14 @@
     tools:context="patryk.songapp.RemoteDataActivity">
 
     <EditText
-        android:id="@+id/searchTitle"
+        android:id="@+id/searchWindow"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@drawable/editext_style"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/titleFilter"
-        android:inputType="text"
-        android:paddingEnd="5dp"
-        android:paddingLeft="5dp"
-        android:paddingStart="5dp"
-        android:textColor="@color/colorPrimaryDark" />
-
-    <EditText
-        android:id="@+id/searchArtist"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/searchTitle"
-        android:background="@drawable/editext_style"
-        android:fontFamily="sans-serif-light"
-        android:hint="@string/artistFilter"
-        android:inputType="text"
-        android:paddingEnd="5dp"
-        android:paddingLeft="5dp"
-        android:paddingStart="5dp"
-        android:textColor="@color/colorPrimaryDark" />
-
-    <EditText
-        android:id="@+id/searchYear"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/searchArtist"
-        android:background="@drawable/editext_style"
-        android:fontFamily="sans-serif-light"
-        android:hint="@string/yearFilter"
+        android:hint="@string/search_hint"
         android:inputType="text"
         android:paddingEnd="5dp"
         android:paddingLeft="5dp"
@@ -53,22 +25,22 @@
         android:id="@+id/sR"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchYear">
+        android:layout_below="@id/searchWindow">
 
         <ListView
             android:id="@+id/dataList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/searchYear" />
+            android:layout_below="@id/searchWindow" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_list2"
         style="@android:style/TextAppearance.Large"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchYear"
+        android:layout_below="@id/searchWindow"
         android:layout_centerInParent="true"
         android:background="@color/edttxt_background"
         android:drawablePadding="10dp"
@@ -76,6 +48,8 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
         android:paddingTop="150dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         android:text="@string/empty_msg"
         android:textColor="@color/test3bright"
         android:textStyle="normal"

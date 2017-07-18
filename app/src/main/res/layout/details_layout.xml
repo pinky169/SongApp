@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/artistInfo"
         android:layout_alignStart="@id/artistInfo"
-        android:layout_below="@id/artistInfo"
+        android:layout_below="@id/artist"
         android:fontFamily="sans-serif-light"
         android:text="@string/release_year"
         android:textAppearance="?android:attr/textAppearanceMedium"
