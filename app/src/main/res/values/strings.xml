@@ -8,4 +8,8 @@
     <string name="welcome_msg"><b>Welcome!</b>\n\nNavigate <i>left</i> to choose <i>remote</i> source.\n\nNavigate <i>right</i> to choose <i>local</i> source.</string>
     <string name="remote">Remote</string>
     <string name="local">Local</string>
+    <string name="titleFilter">Title</string>
+    <string name="artistFilter">Artist</string>
+    <string name="yearFilter">Release year</string>
+    <string name="empty_msg">To search please type a song title, artist or release year</string>
 </resources>

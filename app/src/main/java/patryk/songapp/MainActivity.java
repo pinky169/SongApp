@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         ibRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, SearchActivity.class);
+                Intent i = new Intent(MainActivity.this, LocalDataActivity.class);
                 startActivity(i);
                 //finish();
             }
@@ -31,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         ibLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Coming soon... :D", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, RemoteDataActivity.class);
+                startActivity(i);
             }
         });
     }

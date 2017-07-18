@@ -23,7 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".LocalDataActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".RemoteDataActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
     </application>
