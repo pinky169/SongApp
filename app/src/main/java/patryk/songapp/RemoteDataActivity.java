@@ -1,6 +1,7 @@
 package patryk.songapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -13,12 +14,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +46,16 @@ public class RemoteDataActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.dataList);
         mListView.setEmptyView(findViewById(R.id.empty_list2));
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(view.getContext(), Details.class);
+                intent.putExtra("results", songList.get(position));
+                startActivity(intent);
+
+            }
+        });
 
         searchWindow = (EditText) findViewById(R.id.searchWindow);
         searchWindow.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -95,9 +108,9 @@ public class RemoteDataActivity extends AppCompatActivity {
 
     private class GetSongs extends AsyncTask<String, Void, Void> {
 
-        private String artist;
-        private String track;
-        private String year;
+        private String artist, track, year, collectionName, country, genreName, albumImg;
+        private BigDecimal trackPrice;
+        private List<Result> results;
         private Response response;
 
         @Override
@@ -124,19 +137,29 @@ public class RemoteDataActivity extends AppCompatActivity {
                 }
 
                 if (response != null && response.getResultCount() != 0) {
-                    List<Result> results = response.getResults();
+                    results = response.getResults();
 
                     if (results != null && results.size() > 0) {
                         for (Result result : results) {
                             artist = result.getArtistName();
                             track = result.getTrackName();
                             year = result.getReleaseDate();
+                            collectionName = result.getCollectionName();
+                            country = result.getCountry();
+                            genreName = result.getPrimaryGenreName();
+                            trackPrice = result.getTrackPrice();
+                            albumImg = result.getArtworkUrl100();
 
                             HashMap<String, String> info = new HashMap<>();
 
                             info.put("artistName", artist);
                             info.put("trackName", track);
                             info.put("releaseDate", year);
+                            info.put("collectionName", collectionName);
+                            info.put("country", country);
+                            info.put("primaryGenreName", genreName);
+                            info.put("trackPrice", trackPrice.toString());
+                            info.put("artworkUrl100", albumImg);
                             songList.add(info);
                         }
                     }
@@ -151,7 +174,7 @@ public class RemoteDataActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             mAdapter = new SimpleAdapter(RemoteDataActivity.this, songList,
-                    R.layout.details_layout, new String[]{"trackName", "artistName", "releaseDate"},
+                    R.layout.item_details_layout, new String[]{"trackName", "artistName", "releaseDate"},
                     new int[]{R.id.song_name, R.id.artist, R.id.year});
             mListView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();

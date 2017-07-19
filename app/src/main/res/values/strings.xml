@@ -5,6 +5,10 @@
     <string name="song_name">Song title</string>
     <string name="artist">Artist:</string>
     <string name="release_year">Release date:</string>
+    <string name="collection">Album:</string>
+    <string name="country">Country:</string>
+    <string name="genre">Genre:</string>
+    <string name="price">Track price:</string>
     <string name="empty_list">Nothing here&#8230;</string>
     <string name="welcome_msg"><b>Welcome!</b>\n\n\nNavigate <i>left</i> to choose <i>iTunes</i> source.\n\nNavigate <i>right</i> to choose <i>local</i> source.</string>
     <string name="remote">Remote</string>

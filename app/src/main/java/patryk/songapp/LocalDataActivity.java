@@ -46,7 +46,7 @@ public class LocalDataActivity extends AppCompatActivity {
 
         songList = new ArrayList<>();
         mAdapter = new SimpleAdapter(LocalDataActivity.this, songList,
-                R.layout.details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
+                R.layout.item_details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
                 new int[]{R.id.song_name, R.id.artist, R.id.year});
 
         mListView = (ListView) findViewById(R.id.listView);
@@ -74,7 +74,7 @@ public class LocalDataActivity extends AppCompatActivity {
                 try {
                     ArrayList<HashMap<String, String>> songList = new ArrayList<>();
                     SimpleAdapter mAdapter = new SimpleAdapter(LocalDataActivity.this, songList,
-                            R.layout.details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
+                            R.layout.item_details_layout, new String[]{"Song Clean", "ARTIST CLEAN", "Release Year"},
                             new int[]{R.id.song_name, R.id.artist, R.id.year});
                     mListView.setAdapter(mAdapter);
                     songList.addAll(getResults(charSequence));

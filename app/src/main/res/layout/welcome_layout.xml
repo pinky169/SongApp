@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3498db"
+    android:background="@drawable/gradient"
     android:orientation="vertical">
 
     <TextView
@@ -15,14 +15,12 @@
         android:paddingTop="120dp"
         android:text="@string/welcome_msg"
         android:textAlignment="center"
-        android:textColor="#000000"
         android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/nav_left"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
         android:background="@null"
@@ -34,7 +32,6 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
         android:background="@null"
         android:contentDescription="@string/local"
