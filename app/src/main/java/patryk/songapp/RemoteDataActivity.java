@@ -7,15 +7,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class RemoteDataActivity extends AppCompatActivity {
     SimpleAdapter mAdapter;
     private SwipeRefreshLayout sR;
     private ListView mListView;
-    private ArrayList<HashMap<String, String>> songList;
+    private ArrayList<HashMap<String, String>> songList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +45,14 @@ public class RemoteDataActivity extends AppCompatActivity {
         mListView.setEmptyView(findViewById(R.id.empty_list2));
 
         searchWindow = (EditText) findViewById(R.id.searchWindow);
-        searchWindow.addTextChangedListener(new TextWatcher() {
+        searchWindow.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                new GetSongs().execute(charSequence.toString());
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    new GetSongs().execute(searchWindow.getText().toString());
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -66,7 +60,6 @@ public class RemoteDataActivity extends AppCompatActivity {
         sR.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                searchWindow.setText("");
                 new GetSongs().execute("");
                 mAdapter.notifyDataSetChanged();
             }
@@ -110,8 +103,8 @@ public class RemoteDataActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(!isNetworkAvailable(RemoteDataActivity.this)) {
-                Toast.makeText(RemoteDataActivity.this,"No internet connection",Toast.LENGTH_LONG).show();
+            if (!isNetworkAvailable(RemoteDataActivity.this)) {
+                Toast.makeText(RemoteDataActivity.this, "No internet connection", Toast.LENGTH_LONG).show();
             }
             sR.setRefreshing(true);
         }
@@ -122,35 +115,34 @@ public class RemoteDataActivity extends AppCompatActivity {
             if (isNetworkAvailable(getApplicationContext())) {
 
                 String a = arg0[0];
-
                 songList.clear();
 
-                if (a.isEmpty()) {
-                    response = new Search("Metallica").setEntity(Entity.SONG).execute();
+                if (a.equals("")) {
+                    response = new Search("Metallica").setEntity(Entity.SONG).setLimit(10).execute();
                 } else {
-                    //iTunes API needs url with + separators, example: nothing+elese+matters
-                    a = a.replace(" ", "+");
-                    response = new Search(a).setEntity(Entity.SONG).execute();
+                    response = new Search(a).setEntity(Entity.SONG).setLimit(20).execute();
                 }
 
-                List<Result> results = response.getResults();
+                if (response != null && response.getResultCount() != 0) {
+                    List<Result> results = response.getResults();
 
-                if (results != null && results.size() > 0) {
-                    for (Result result : results) {
-                        artist = result.getArtistName();
-                        track = result.getTrackName();
-                        year = result.getReleaseDate();
+                    if (results != null && results.size() > 0) {
+                        for (Result result : results) {
+                            artist = result.getArtistName();
+                            track = result.getTrackName();
+                            year = result.getReleaseDate();
 
-                        HashMap<String, String> info = new HashMap<>();
+                            HashMap<String, String> info = new HashMap<>();
 
-                        info.put("artistName", artist);
-                        info.put("trackName", track);
-                        info.put("releaseDate", year);
-                        songList.add(info);
+                            info.put("artistName", artist);
+                            info.put("trackName", track);
+                            info.put("releaseDate", year);
+                            songList.add(info);
+                        }
                     }
                 }
             } else {
-                //Log.i("SongApp->", results.toString());
+                return null;
             }
             return null;
         }

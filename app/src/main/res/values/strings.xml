@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Song app for ToopLoox</string>
     <string name="search_hint">Search by: song title, artist, year</string>
+    <string name="search_itunes_hint">Type in a song title, artist or year and hit OK</string>
     <string name="song_name">Song title</string>
     <string name="artist">Artist:</string>
     <string name="release_year">Release date:</string>
