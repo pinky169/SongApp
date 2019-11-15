@@ -1,4 +1,4 @@
-## SongApp !
+## Song App !
 <p align="left">
 <br>
 App  is supposed to fetch and display data from two sources, local and remote (iTunes search API).<br>
